@@ -50,7 +50,7 @@ end
 qecc_repetitioncode(n::Integer)
 
 n-qubit repetition code.
-Stabilizers are of X-type
+Viewed as a classical code.
 """
 function qecc_repetitioncode(n::Integer)
     H = zeros( Int, (n,n-1))
@@ -58,7 +58,7 @@ function qecc_repetitioncode(n::Integer)
         H[j+1,j] = 1
         H[j,j] = 1            
     end
-    return QECC("Repetition Code", SparseMatrixCSC(H), n)
+    return QECC("Repetition Code", SparseMatrixCSC(H), 0) #no data qubits, we view this as only measurement errors
 end
 function qeccgraph_repetitioncode(n::Integer)
     H = qecc_repetitioncode(n)

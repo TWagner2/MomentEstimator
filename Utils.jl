@@ -227,6 +227,24 @@ end
 function nonzeroindices( A::SparseVector)
     return A.nzind    
 end
+function nonzeroindices_cartesian( A)
+    Indices = []
+    for i in CartesianIndices(A)
+        if A[i] != zero(A[i])
+            push!(Indices,i)
+        end
+    end
+    return Indices
+end
+function nonzeroindex_cartesian( A)
+    for i in CartesianIndices(A)
+        if A[i] != zero(A[i])
+            return i
+        end
+    end
+    return nothing
+end
+
 """
 cartesianproduct(A,n)
 

@@ -4,7 +4,7 @@ l = 3
 project = true
 p1=0.01
 p2=0.005
-beta=0.0001
+beta=0.001
 n_step=1
 n_estimate = [10^5]
 SamplePerSimulation = true
@@ -28,7 +28,7 @@ end
 @info "Parameters" n_simulation l project n_estimate beta n_step SamplePerSimulation
 
 LocalEstimator = Estimator_lsq_optim(β=beta, n_step=n_step, Options=Options)
-ChannelSampler = ChannelSampler_Constant(channel_nnsurfacecode(l,p1,p2))
+ChannelSampler = ChannelSampler_Constant(channel_nnsurfacecode(l,p1,p2)) #A form of nearest neighbor noise includign 2 qubit errors
 Code = qeccgraph_surfacecode_regular(l)
 Regularizer = nothing
 
@@ -50,7 +50,7 @@ for i in axes(e,1)
         ApproxRates[e[i,j]+1,i] += 1
     end
 end
-ApproxRates = ApproxRates / 10^6
+ApproxRates = ApproxRates / 10^6 #Approximate 1 qubit marginals of the actual noise
 
 if DecodeMarginals
     @info "Decode Marginals"
@@ -59,6 +59,7 @@ if DecodeMarginals
 end
 
 for n_est in n_estimate
+#Note that the estimate will not converge to the marginals. This is expected, since the marginals are not the best possible approximation as a convolution to the actual noise
 println("Est")
 display(File["n_est=$n_est"]["EstimatedErrorRates"][])
 println("Actual Marginals")

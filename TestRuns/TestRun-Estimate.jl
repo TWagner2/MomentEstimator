@@ -6,30 +6,22 @@ muT1 = 80e-6
 muTphi = 57e-6
 sigmaT1 = 35e-6
 sigmaTphi = 26e-6
-t = 5e-6 #15e-6
+t = 5e-6
 beta=0.001
 n_step=1
 SamplePerSimulation=true
 regularize=false
 fullcovariance=false
-select=  2000 #nothing #2000
-n_estimate = [100000]
+select=nothing
+n_estimate = [10000]
 Options = Optim.Options()
 
-#Code = qecc_surfacecode_regular(l)
-#f_neighborhops = surfacecode_hops
-#ChannelSampler = ChannelSampler_Constant(Channel_SingleQubit(expand_errorrates(0.1,13)))
 Code = qecc_surfacecode_regular(l)
-Code = qecc_repeat_measurements(Code,2)
-f_neighborhops = surfacecode_hops_repeated
-ChannelSampler = ChannelSampler_Constant(Channel_SingleQubit(expand_errorrates(0.01,13),expand_errorrates([0.98,0.02],24)))
-
-#LocalEstimator = Estimator_pinv(β=beta, n_qubit = Code.n_d)
+f_neighborhops = surfacecode_hops
+ChannelSampler = ChannelSampler_TVAPDTwirled(t=t,μ_T1 = muT1, μ_Tphi = muTphi, σ_T1 = sigmaT1, σ_Tphi = sigmaTphi, SamplePerSimulation = SamplePerSimulation) #Sample a different Amplitude+Phase damping channel for each qubit
 LocalEstimator = Estimator_lsq_optim(β=beta, n_step=n_step, Options=Options,select=select)
 
-
-Debug=true
-
+Debug=false
 if Debug
     @everywhere global_logger(ConsoleLogger(Logging.Debug,show_limited=false))
 else
@@ -44,7 +36,7 @@ if regularize
     SampleMom = momentsfromrates(SampleP)[2:end,:]
     Mean = dropdims(mean(SampleMom;dims=2);dims=2)
     if !fullcovariance
-	    Var = dropdims(var(SampleMom;dims=2);dims=2) #We could also estimate the full covariance matrix instead but it will be singular because it only has 2 parameters
+	    Var = dropdims(var(SampleMom;dims=2);dims=2) #We could also estimate the full covariance matrix instead (it will be singular because it only has 2 parameters)
 	    Regularizer = TiledRegularizer_L2_Repeating(Mean,(1 ./ Var))
     else
 	    Cov = cov(SampleMom')

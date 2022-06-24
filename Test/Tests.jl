@@ -1,5 +1,5 @@
 using Test
-include("Main.jl")
+include("../src/Main.jl")
 
 @testset "Misc Utils" begin
     a = (1.3,-5)

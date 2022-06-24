@@ -67,7 +67,7 @@ In the examples Folder, there are some more examples of Simulations, such as ran
 To run an example from the main folder using the appropriate environment, use e.g.
 
 ```
-julia -project=. Examples/TestRun-Estimate.jl
+julia --project=. Examples/TestRun-Estimate.jl
 ```
 
 We also support decoding with the sweep decoder developed by Chubb in https://doi.org/10.48550/arXiv.2101.04125 , although this does not support measurement noise.

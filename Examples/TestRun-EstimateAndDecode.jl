@@ -1,4 +1,4 @@
-include("../Main.jl")
+include("../src/Main.jl")
 n_simulation = 1
 l = 3
 project = true

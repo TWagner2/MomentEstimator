@@ -4,6 +4,14 @@ This is an implementation of the estimator described in the paper "Pauli channel
 
 ## Basic Usage
 
+You can activate the julia project in the Julia package manager from the main folder of the project.
+```
+pkg> activate .
+pkg> instantiate
+```
+This should install all dependencies in a new environment.
+
+
 Here is a basic example how to use this module.
 ```julia
 include("Main.jl")
@@ -56,5 +64,11 @@ display(Estimate[1])
 ## Simulations and decoding
 
 In the examples Folder, there are some more examples of Simulations, such as randomly sampling a channel for each qubit and then estimating.
+To run an example from the main folder using the appropriate environment, use e.g.
+
+```
+julia -project=. Examples/TestRun-Estimate.jl
+```
+
 We also support decoding with the sweep decoder developed by Chubb in https://doi.org/10.48550/arXiv.2101.04125 , although this does not support measurement noise.
 Using this, one can compare the logical error rates of the code when the decoder uses the actual or the estimated error rates.
